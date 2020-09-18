@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import QuizCard from "../../components/QuizCard";
+import List from "../../components/List";
 import API from "../../utils/api";
 
 export default (props: any) => {
+  //Application state
   const [appState, setAppState] = useState({
     loading: false,
     trivia: null,
     score: 0,
     questionNumber: 0,
     selected: false,
+    gameOver: false,
   });
+  //asynchronously fetch data once the component is mounted.
   useEffect(() => {
     setAppState({
       ...appState,
@@ -26,14 +29,24 @@ export default (props: any) => {
     setAppState({ ...appState, score: appState.score + 1, selected: true });
   };
   const increaseQuestionNumber = () => {
+    //increase questions while number is less than 5
+    const currentQuestionNumber = appState.questionNumber;
     setAppState({
       ...appState,
       questionNumber: appState.questionNumber + 1,
       selected: false,
     });
+    //trigger game over once the user reaches teh 4th question ( 2nd last )
+    if (currentQuestionNumber === 3) {
+      setAppState({
+        ...appState,
+        questionNumber: appState.questionNumber + 1,
+        gameOver: true,
+        selected: false,
+      });
+    }
   };
   const setSelected = (value: boolean) => {
-    console.log("triggered select callback", value);
     setAppState({ ...appState, selected: value });
   };
 
@@ -49,42 +62,28 @@ export default (props: any) => {
           questionNumber={appState.questionNumber}
           selected={appState.selected}
           setSelected={setSelected}
+          score={appState.score}
+          gameover={appState.gameOver}
         />
-        <h1>Score: {appState.score}</h1>
       </Header>
     </React.Fragment>
   );
 };
 
+/**
+ * A HOC that handles the UI of the app until its finished loading the API.
+ * Using the state of isLoading to check if the API is done calling the endpoint
+ * The component passed in as a parameter is rendered with the remaining props.
+ * @param Component Component to be rendered with API data.
+ */
+
 function WithListLoading(Component: any) {
   return function WihLoadingComponent({ isLoading, ...props }: any) {
     if (!isLoading) return <Component {...props} />;
     return (
-      <p style={{ textAlign: "center", fontSize: "30px" }}>
+      <p style={{ textAlign: "center", fontSize: "40px" }}>
         Hold on, fetching data may take some time :)
       </p>
     );
   };
 }
-const List = (props: any) => {
-  const {
-    trivia,
-    increaseScore,
-    increaseQuestionNumber,
-    questionNumber,
-    selected,
-    setSelected,
-  } = props;
-  if (!trivia || trivia.length === 0) return <p>No repos, sorry</p>;
-  return (
-    <div>
-      <QuizCard
-        increaseScore={increaseScore}
-        increaseQuestionNumber={increaseQuestionNumber}
-        trivia={trivia[questionNumber]}
-        selected={selected}
-        setSelected={setSelected}
-      ></QuizCard>
-    </div>
-  );
-};

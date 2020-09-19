@@ -1,3 +1,7 @@
+/**
+ * QuizCard is the main component that handles onClick events, displays questions, options and score.
+ */
+
 import React from "react";
 import Button from "./Button";
 import checkSelectedOption from "../utils/checkSelectedOptions";
@@ -72,7 +76,7 @@ export default ({
           Next
         </button>
       </div>
-      {gameover && <h1>Please restart game to play again</h1>}
+      {gameover && <h1>Thank you for playing Quizzy!</h1>}
     </div>
   );
 };

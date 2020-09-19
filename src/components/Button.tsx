@@ -1,3 +1,7 @@
+/**
+ * Custom button used as options for selecting the answers for questions.
+ */
+
 import React from "react";
 
 type ButtonProps = {

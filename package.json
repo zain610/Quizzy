@@ -1,8 +1,7 @@
 {
-  "homepage": "http://zain610.github.io/quizzy",
+  "homepage": "http://zain610.github.io/Quizzy",
   "name": "quizzy",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
